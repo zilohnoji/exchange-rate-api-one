@@ -1,4 +1,4 @@
-package com.donatoordep.mappers;
+package com.donatoordep.mappers.libs;
 
 
 public interface Deserializer<T, L> {

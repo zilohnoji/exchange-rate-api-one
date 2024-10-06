@@ -1,31 +1,23 @@
 package com.donatoordep;
 
-import com.donatoordep.entities.Address;
-import com.donatoordep.mappers.Deserializer;
-import com.donatoordep.mappers.impl.JacksonDeserializer;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import com.donatoordep.api.ApiExchangeRateSpecification;
+import com.donatoordep.api.impl.ExchangeRateService;
+import com.donatoordep.dto.response.GetPairQuotationResponseDTO;
+import com.donatoordep.entities.Currency;
+import com.donatoordep.enums.CurrencyCode;
+import com.donatoordep.mappers.libs.impl.JacksonDeserializer;
 
 public class ConverseTyApplication {
 
-    private static JacksonDeserializer<Address> mapper = JacksonDeserializer.createInstance(Address.class);
+    private static final JacksonDeserializer<GetPairQuotationResponseDTO> jacksonDeserializer = JacksonDeserializer.createInstance(GetPairQuotationResponseDTO.class);
+    private static final ApiExchangeRateSpecification<Currency> service = new ExchangeRateService(jacksonDeserializer);
 
-    public static void main(String[] args) throws Exception {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://viacep.com.br/ws/20760580/json/"))
-                .GET()
-                .build();
+    public static void main(String[] args) throws Throwable {
+        Currency pairQuotation = service.getPairQuotation(CurrencyCode.BRL, CurrencyCode.USD, 20D);
 
-        HttpClient client = HttpClient.newBuilder().build();
-
-        HttpResponse<String> t = client.send(request, HttpResponse.BodyHandlers.ofString());
-        
-        Address address = mapper.deserialize(t.body());
+        System.out.println(pairQuotation.getLastUpdate());
+        System.out.println(pairQuotation.getCode());
+        System.out.println(pairQuotation.getConversionRates());
     }
 }

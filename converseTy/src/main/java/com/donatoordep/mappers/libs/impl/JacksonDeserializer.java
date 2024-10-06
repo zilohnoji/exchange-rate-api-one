@@ -1,6 +1,6 @@
-package com.donatoordep.mappers.impl;
+package com.donatoordep.mappers.libs.impl;
 
-import com.donatoordep.mappers.Deserializer;
+import com.donatoordep.mappers.libs.Deserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public final class JacksonDeserializer<T> implements Deserializer<T, ObjectMapper> {
